@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+# constatns
+/src/configs
+
 # testing
 /coverage
 
