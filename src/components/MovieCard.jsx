@@ -4,21 +4,21 @@ const MovieCard = ({ movie }) => {
   return (
     <div className="movie">
       <div>
-        <p>{movie.year}</p>
+        <p>{movie.Year}</p>
       </div>
       <div>
         <img
           src={
-            movie.poster !== "N/A"
-              ? movie.poster
+            movie.Poster !== "N/A"
+              ? movie.Poster
               : "https://via.placeholder.com/400"
           }
-          alt={movie.title}
+          alt={movie.Title}
         />
       </div>
       <div>
-        <span>{movie.type}</span>
-        <h3>{movie.title}</h3>
+        <span>{movie.Type}</span>
+        <h3>{movie.Title}</h3>
       </div>
     </div>
   );

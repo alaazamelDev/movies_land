@@ -1,6 +1,6 @@
 import React from "react";
-import { apiKey } from "./configs/constatns";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getMovie } from "./services/movies_api";
 
 // assets
 import searchIcon from "./search.svg";
@@ -10,31 +10,27 @@ import MovieCard from "./components/MovieCard";
 
 import "./App.css";
 
-const API_URL = "https://www.omdbapi.com/?apikey=" + apiKey;
-
-const movie1 = {
-  title: "De Superman à Spider-Man: L'aventure des super-héros",
-  year: "2001",
-  imdbID: "tt0420574",
-  type: "movie",
-  poster:
-    "https://m.media-amazon.com/images/M/MV5BNDM0N2NmYjctMTI3ZC00NTQyLWI1YWMtZDBlNWJjYzBkMDlhXkEyXkFqcGdeQXVyMTYxNjkxOQ@@._V1_SX300.jpg",
-};
+// const movie1 = {
+//   title: "De Superman à Spider-Man: L'aventure des super-héros",
+//   year: "2001",
+//   imdbID: "tt0420574",
+//   type: "movie",
+//   poster:
+//     "https://m.media-amazon.com/images/M/MV5BNDM0N2NmYjctMTI3ZC00NTQyLWI1YWMtZDBlNWJjYzBkMDlhXkEyXkFqcGdeQXVyMTYxNjkxOQ@@._V1_SX300.jpg",
+// };
 
 const App = () => {
-  //   const [response, setResponse] = useState("");
+  // define state that holds list of fetched Movies
+  const [movies, setMovies] = useState([]);
+  const [query, setQuery] = useState("");
 
-  // get mobie by title
-  const getMovie = async (title) => {
-    const res = await fetch(`${API_URL}&s=${title}`);
-    const data = await res.json();
-
-    console.log(data.Search);
+  const fetchMovies = async (title) => {
+    const data = (await getMovie(title)).Search;
+    setMovies(data); // set the movies
   };
 
-  // fetch data as soon as page is loaded
   useEffect(() => {
-    getMovie("Super Man");
+    fetchMovies("Need for speed");
   }, []);
 
   return (
@@ -45,14 +41,28 @@ const App = () => {
       <div className="search">
         <input
           placeholder="Search for movies"
-          value={"Superman"}
-          onChange={() => {}}
+          value={query}
+          onChange={(event) => {
+            setQuery(event.target.value);
+          }}
         />
-        <img src={searchIcon} alt={"searchIcon"} />
+        <img
+          src={searchIcon}
+          alt={"searchIcon"}
+          onClick={() => {
+            fetchMovies(query);
+          }}
+        />
       </div>
 
-      {/* Movies Card */}
-      <MovieCard movie={movie1} />
+      {/* Movies Cards */}
+      <div className="container">
+        {movies.length > 0 ? (
+          movies.map((movie) => <MovieCard movie={movie} />)
+        ) : (
+          <div className="empty">No Movies Found</div>
+        )}
+      </div>
     </div>
   );
 };
